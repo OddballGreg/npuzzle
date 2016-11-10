@@ -11,6 +11,7 @@ function parse($fileName)
 	else if ($size < 3)
 		die("Puzzle is too small.\n");
 
+	$GLOBALS['size'] = (int)trim($contents[1]);
 	$contents = array_splice($contents, 1);
 	$hash = NULL;
 	foreach ($contents as $line)
@@ -18,8 +19,4 @@ function parse($fileName)
 	return (trim($hash, ','));
 }
 
-function setGoal()
-{
-	
-}
 ?>
