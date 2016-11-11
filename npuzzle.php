@@ -10,11 +10,6 @@ require_once("Node.class.php");
 require_once("heuristics.php");
 require_once("solve.php");
 
-if ($argc < 2)
-	die("Too few arguements given\n");
-if (file_exists($argv[1]) == FALSE)
-	die("File does not exit\n");
-
 const HAMMING = 1;
 const MANHATTAN = 2;
 const EUCLIDEAN = 3;
@@ -25,7 +20,13 @@ $GLOBALS['csets'] = array(); // Closed Sets
 $GLOBALS['idc'] = 0; // ID counter
 $GLOBALS['size'] = 3; // Grid Size
 
-$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, parse($argv[1]), $GLOBALS['size'], 0);
+if (isset($argv[1]) && file_exists($argv[1]) == TRUE)
+	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, parse($argv[1]), $GLOBALS['size'], 0);
+else
+{
+	echo "Invalid file or no puzzle given, automatically generating random 3x3 puzzle\n";
+	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, genPuzzle(), $GLOBALS['size'], 0); //genPuzzle() is undefined currently
+}
 $GLOBALS['sol'] = new Node("sol", NULL, $GLOBALS['osets'][0]->getHash(), $GLOBALS['size'], 0);
 $GLOBALS['sol']->setGoal();
 $GLOBALS['hstc'] = HAMMING;
