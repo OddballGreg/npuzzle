@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 
 require_once("parse.php");
 require_once("Node.class.php");
-//require_once("hueristics.php");
+require_once("heuristics.php");
 require_once("solve.php");
 
 if ($argc < 2)
@@ -25,11 +25,9 @@ $GLOBALS['csets'] = array(); // Closed Sets
 $GLOBALS['idc'] = 0; // ID counter
 $GLOBALS['size'] = 3; // Grid Size
 
-$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, parse($argv[1]), $GLOBALS['size']);
-echo $GLOBALS['osets'][0] . "\n";
-$GLOBALS['sol'] = new Node("sol", NULL, $GLOBALS['osets'][0]->hash(), $GLOBALS['size']);
+$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, parse($argv[1]), $GLOBALS['size'], 0);
+$GLOBALS['sol'] = new Node("sol", NULL, $GLOBALS['osets'][0]->getHash(), $GLOBALS['size'], 0);
 $GLOBALS['sol']->setGoal();
-echo $GLOBALS['sol'];
 $GLOBALS['hstc'] = HAMMING;
 
 echo "\nPlease select the heuristic you would like to use to solve this puzzle...";
@@ -47,6 +45,12 @@ else
 	echo "Please enter either 1, 2, or 3\n";
 	goto userin;
 }
+
+$GLOBALS['osets'][0]->setCost();
+$GLOBALS['sol']->setCost(0);
+echo "\n" . $GLOBALS['osets'][0] . "\n";
+echo $GLOBALS['sol'] . "\n";
+
 solve();
 
 ?>
