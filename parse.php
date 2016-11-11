@@ -16,7 +16,7 @@ function parse($fileName)
 	$hash = NULL;
 	foreach ($contents as $line)
 		$hash = $hash . trim($line) . ",";
-	return (trim($hash, ','));
+	return (trim($hash, ',')); //Implement checks to make sure that the supplied puzzle is valid
 }
 
 ?>

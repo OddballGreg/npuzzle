@@ -19,14 +19,53 @@ function hamming($node, $solution)
 	return($cost);
 }
 
-function euclidean()
+function euclidean($node, $solution)
 {
-
+	$ngrid = $node->getGrid();
+	$sgrid = $solution->getGrid();
+	$preshash = explode(",", $solution->getHash());
+	$shash = array();
+	foreach ($preshash as $line) 
+		$shash = array_merge($shash, explode(' ', $line)); 
+	$cost;
+	foreach ($shash as $value)
+	{
+		$sxy = findxy($sgrid, $value);
+		$nxy = findxy($ngrid, $value);
+		$cost[] = abs(abs($sxy['x'] + $sxy['y']) - abs($nxy['x'] + $nxy['y']));
+	}
+	return(array_sum($cost));
 }
 
-function manhattan()
+function manhattan($node, $solution)
 {
+	$ngrid = $node->getGrid();
+	$sgrid = $solution->getGrid();
+	$preshash = explode(",", $solution->getHash());
+	$shash = array();
+	foreach ($preshash as $line) 
+		$shash = array_merge($shash, explode(' ', $line)); 
+	$cost;
+	foreach ($shash as $value)
+	{
+		$sxy = findxy($sgrid, $value);
+		$nxy = findxy($ngrid, $value);
+		$cost[] = abs($sxy['x'] - $nxy['x']) + abs($sxy['y'] - $nxy['y']);
+	}
+	return(array_sum($cost));
+}
 
+function findxy($grid, $number)
+{
+	$x = -1;
+		while (isset($grid[++$x]))
+		{
+			$y = -1;
+			while (isset($grid[$x][++$y]))
+				if ($grid[$x][$y] == $number)
+					return(['x' => $x, 'y' => $y]);
+		}
+	return (FALSE);
 }
 
 ?>

@@ -36,7 +36,7 @@ class Node
 				}
 		}
 
-		if ($this->_id != "sol" && $this->_id != 0)
+		if ($this->_id != "sol" && $this->_id != 0) // Cost setting is dependent on the solution existing. The solution is derived from the initial state.
 			$this->setCost();
 	}
 
@@ -48,6 +48,11 @@ class Node
 	public function getHash()
 	{
 		return ($this->_hash);
+	}
+
+	public function getGrid()
+	{
+		return ($this->_grid);
 	}
 
 	public function setCost($cost = NULL)

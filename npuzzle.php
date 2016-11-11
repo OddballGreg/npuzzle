@@ -31,7 +31,7 @@ $GLOBALS['sol']->setGoal();
 $GLOBALS['hstc'] = HAMMING;
 
 echo "\nPlease select the heuristic you would like to use to solve this puzzle...";
-echo "\n(1) Manhattan Distance Heuristic\n(2) Hamming Distance Heuristic\n(3) Euclidean Distance Heuristic\n";
+echo "\n(1) Hamming Distance Heuristic\n(2) Manhattan Distance Heuristic\n(3) Euclidean Distance Heuristic\n";
 		userin:
 $line = fgets(STDIN);
 if (strncmp($line, '1', 1) == 0)
