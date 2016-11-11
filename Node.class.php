@@ -97,8 +97,15 @@ class Node
 			$grid [$this->_emptyxy['x'] + 1] [$this->_emptyxy['y']] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			if (strcmp($this->_parentHash, $hash) !== 0)
-				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
+            $check = FALSE;
+            foreach ($GLOBALS['csets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+            foreach ($GLOBALS['osets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x'] - 1] [$this->_emptyxy['y']] ))
@@ -107,8 +114,15 @@ class Node
 			$grid [$this->_emptyxy['x'] - 1] [$this->_emptyxy['y']] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			if (strcmp($this->_parentHash, $hash) !== 0)
-				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
+            $check = FALSE;
+            foreach ($GLOBALS['csets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+            foreach ($GLOBALS['osets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x']] [$this->_emptyxy['y'] + 1] ))
@@ -117,8 +131,15 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']  + 1] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			if (strcmp($this->_parentHash, $hash) !== 0)
-				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
+            $check = FALSE;
+            foreach ($GLOBALS['csets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+            foreach ($GLOBALS['osets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x']] [$this->_emptyxy['y'] - 1] ))
@@ -126,9 +147,16 @@ class Node
 			$temp = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y'] - 1];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']  - 1] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
-			$hash = $this->makeHash($grid);
-			if (strcmp($this->_parentHash, $hash) !== 0)
-				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
+            $hash = $this->makeHash($grid);
+            $check = FALSE;
+            foreach ($GLOBALS['csets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+            foreach ($GLOBALS['osets'] as $oset)
+                if (strcmp($oset->getHash(), $hash) === 0)
+                    $check = TRUE;
+			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		return($moves);
 	}
