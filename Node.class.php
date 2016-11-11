@@ -2,6 +2,7 @@
 
 class Node
 {
+	private $_parentHash;
 	private $_hash;
 	private $_grid;
 	private $_parent;
@@ -11,12 +12,13 @@ class Node
 	private $_estcost;
 	private $_emptyxy = array('x' => 0, 'y' => 0);
 
-	public function __construct($id, $parent, $hash, $size, $dist)
+	public function __construct($id, $parent, $hash, $size, $dist, $parentHash)
 	{
 		$this->_id = $id;
 		$this->_parent = $parent;
 		$this->_size = $size;
 		$this->_dist = $dist;
+		$this->_parentHash = $parentHash;
 
 		$this->_hash = $hash;
 		$this->_grid = explode(",", $hash);
@@ -42,7 +44,7 @@ class Node
 
 	public function __ToString()
 	{
-		return ("ID: {$this->_id}\t\tHash: {$this->_hash}\tDistance Travelled: {$this->_dist}\tCost: {$this->_estcost}");
+		return ("ID: {$this->_id}\t\tHash: {$this->_hash}\t\tDistance Travelled: {$this->_dist}\tCost: {$this->_estcost}\t\tParentID: {$this->_parent}");
 	}
 
 	public function getHash()
@@ -95,7 +97,8 @@ class Node
 			$grid [$this->_emptyxy['x'] + 1] [$this->_emptyxy['y']] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1);
+			if (strcmp($this->_parentHash, $hash) !== 0)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x'] - 1] [$this->_emptyxy['y']] ))
@@ -104,7 +107,8 @@ class Node
 			$grid [$this->_emptyxy['x'] - 1] [$this->_emptyxy['y']] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1);
+			if (strcmp($this->_parentHash, $hash) !== 0)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x']] [$this->_emptyxy['y'] + 1] ))
@@ -113,7 +117,8 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']  + 1] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1);
+			if (strcmp($this->_parentHash, $hash) !== 0)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
 		$grid = $this->_grid;
 		if (isset( $grid [$this->_emptyxy['x']] [$this->_emptyxy['y'] - 1] ))
@@ -122,9 +127,10 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']  - 1] = $grid [$this->_emptyxy['x']] [$this->_emptyxy['y']];
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
-			$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1);
+			if (strcmp($this->_parentHash, $hash) !== 0)
+				$moves[] = new Node($GLOBALS['idc']++, $this->_id + 1, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
-		return($moves); // Implement node variable "parentHash" to allow checking against moves that simply reverse the previous move
+		return($moves);
 	}
 
 	public function setGoal()

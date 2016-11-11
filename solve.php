@@ -34,7 +34,7 @@ function solve()
 		while (isset($GLOBALS['osets'][++$index]))
 			if ($cheapest->getId() == $GLOBALS['osets'][$index]->getId())
 				$GLOBALS['osets'] = array_diff($GLOBALS['osets'], [$cheapest]);
-		//echo "Closed Set: " . $cheapest . "\n";
+		echo "Closed Set: " . $cheapest . "\n";
 	}
 }
 
