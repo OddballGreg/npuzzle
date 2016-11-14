@@ -18,14 +18,19 @@ function solve()
 			if (!isset($cheapest))
 				$cheapest = $node;
 			if ($GLOBALS['algo'] == ASTAR)
+			{
 				if (isset($cheapest) && $node->getFofX() < $cheapest->getFofX())
 					$cheapest = $node;
+			}
 			else if ($GLOBALS['algo'] == GREEDY)
+			{
 				if (isset($cheapest) && $node->getCost() < $cheapest->getCost())
 					$cheapest = $node;
+			}
 			else if ($GLOBALS['algo'] == DEPTHFIRST)
-				if (isset($cheapest) && $node->getDist() > $cheapest->getDist())
-					$cheapest = $node;
+			{
+					$cheapest = end($GLOBALS['osets']);
+			} 
 			else //breadthfirst
 				break;
 		}
