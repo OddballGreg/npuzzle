@@ -2,7 +2,7 @@
 
 function solve()
 {
-	if (strcmp($GLOBALS['osets'][0]->getHash(), $GLOBALS['sol']->getHash()) == 0)
+	if (strcmp($GLOBALS['osets'][0][0]->getHash(), $GLOBALS['sol']->getHash()) == 0)
         die ("Puzzle is already solved.\n");
 
     $time = time();
@@ -11,12 +11,25 @@ function solve()
     { 
         $iterations++;
 		$cheapest = NULL;
-		foreach ($GLOBALS['osets'] as $node)
+		$fofx = 0;
+		while ($cheapest == NULL)
 		{
-			if ($cheapest == NULL)
-				$cheapest = $node;
-			if ($cheapest != NULL && $node->getFofX() < $cheapest->getFofX())
-				$cheapest = $node;
+			echo $fofx . "\n";
+			if (array_key_exists($fofx, $GLOBALS['osets']))
+				if ($GLOBALS['osets'][$fofx][0] == NULL)
+					unset($GLOBALS['osets'][$fofx]);
+			if (is_array($GLOBALS['osets'][$fofx]))
+			{
+				echo "Array found\n";
+				foreach ($GLOBALS['osets'][$fofx] as $node)
+				{
+					if ($cheapest == NULL)
+						$cheapest = $node;
+					if ($cheapest != NULL && $node->getFofX() < $cheapest->getFofX())
+						$cheapest = $node;
+				}
+			}
+			$fofx++;
 		}
 		if ($cheapest == NULL)
             die ("No open set found\n");
@@ -38,16 +51,22 @@ function solve()
 		}
 		
 		foreach ($newnodes as $new)
-			$GLOBALS['osets'][] = $new;
+		{	
+			echo $new->getFofX . PHP_EOL;
+			$GLOBALS['osets'][$new->getFofX][] = $new;
+		}
 
 		//Add cheapest to closed sets and remove from open sets
 		$GLOBALS['csets'][] = $cheapest;
 		$index = -1;
-		while (isset($GLOBALS['osets'][++$index]))
-			if ($cheapest->getId() === $GLOBALS['osets'][$index]->getId())
-				array_splice($GLOBALS['osets'], $index, 1);
+		while (isset($GLOBALS['osets'][$fofx][++$index]))
+			if ($cheapest->getId() === $GLOBALS['osets'][$fofx][$index]->getId())
+				array_splice($GLOBALS['osets'][$fofx], $index, 1);
 		if ($GLOBALS['verb'] == 1)
+		{
 			echo $cheapest . "\n";
+			echo $iterations . " iterations.\n";
+		}
 		else if ($iterations % 100 == 0)
 			echo ".";
 	}

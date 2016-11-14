@@ -38,8 +38,11 @@ class Node
 				}
 		}
 
-		if ($this->_id != "sol" && $this->_id != 0) // Cost setting is dependent on the solution existing. The solution is derived from the initial state.
-			$this->setCost();
+		if ($this->_id != "sol" && $this->_id != 0)
+		{
+			$this->setCost(); // Cost setting is dependent on the solution existing. The solution is derived from the initial state.
+			$GLOBALS['uhash'][] = $this->_hash;
+		}
 	}
 
 	public function __ToString()
@@ -104,13 +107,8 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $cset)
-                if (strcmp($cset->getHash(), $hash) === 0)
-                    $check = TRUE;
-			if ($check != TRUE)
-            	foreach ($GLOBALS['osets'] as $oset)
-                	if (strcmp($oset->getHash(), $hash) === 0)
-                    	$check = TRUE;
+            if (in_array($this->_hash, $GLOBALS['uhash']))
+				$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -122,13 +120,8 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $cset)
-                if (strcmp($cset->getHash(), $hash) === 0)
-                    $check = TRUE;
-			if ($check != TRUE)
-            	foreach ($GLOBALS['osets'] as $oset)
-                	if (strcmp($oset->getHash(), $hash) === 0)
-                    	$check = TRUE;
+            if (in_array($this->_hash, $GLOBALS['uhash']))
+				$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -140,13 +133,8 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $cset)
-                if (strcmp($cset->getHash(), $hash) === 0)
-                    $check = TRUE;
-			if ($check != TRUE)
-            	foreach ($GLOBALS['osets'] as $oset)
-                	if (strcmp($oset->getHash(), $hash) === 0)
-                    	$check = TRUE;
+            if (in_array($this->_hash, $GLOBALS['uhash']))
+				$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -158,13 +146,8 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
             $hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $cset)
-                if (strcmp($cset->getHash(), $hash) === 0)
-                    $check = TRUE;
-			if ($check != TRUE)
-            	foreach ($GLOBALS['osets'] as $oset)
-                	if (strcmp($oset->getHash(), $hash) === 0)
-                    	$check = TRUE;
+            if (in_array($this->_hash, $GLOBALS['uhash']))
+				$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}

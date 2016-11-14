@@ -21,15 +21,16 @@ $GLOBALS['idc'] = 0; // ID counter
 $GLOBALS['size'] = 3; // Grid Size
 
 if (isset($argv[1]) && file_exists($argv[1]) == TRUE)
-	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, "Initial", parse($argv[1]), $GLOBALS['size'], 0, NULL);
+	$GLOBALS['osets'][0][] = new Node($GLOBALS['idc']++, "Initial", parse($argv[1]), $GLOBALS['size'], 0, NULL);
 else
 {
 	echo "Invalid file or no puzzle given, automatically generating random 3x3 puzzle\n";
-	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, "Initial", genPuzzle(), $GLOBALS['size'], 0, NULL); //genPuzzle() is undefined currently
+	$GLOBALS['osets'][0][] = new Node($GLOBALS['idc']++, "Initial", genPuzzle(), $GLOBALS['size'], 0, NULL); //genPuzzle() is undefined currently
 }
-$GLOBALS['sol'] = new Node("sol", "Solution", $GLOBALS['osets'][0]->getHash(), $GLOBALS['size'], 0, NULL);
+$GLOBALS['sol'] = new Node("sol", "Solution", $GLOBALS['osets'][0][0]->getHash(), $GLOBALS['size'], 0, NULL);
 $GLOBALS['sol']->setGoal();
 $GLOBALS['hstc'] = HAMMING;
+$GLOBALS['uhash'] = array();
 
 echo "\nPlease select the heuristic you would like to use to solve this puzzle...";
 echo "\n(1) Hamming Distance Heuristic\n(2) Manhattan Distance Heuristic\n(3) Euclidean Distance Heuristic\n";
@@ -61,9 +62,10 @@ else
 	goto verbose;
 }
 
-$GLOBALS['osets'][0]->setCost();
+$GLOBALS['osets'][0][0]->setCost();
 $GLOBALS['sol']->setCost(0);
-echo "\n" . $GLOBALS['osets'][0] . "\n";
+$GLOBALS['uhash'][] = $GLOBALS['osets'][0][0]->getHash();
+echo "\n" . $GLOBALS['osets'][0][0] . "\n";
 echo $GLOBALS['sol'] . "\n\n";
 
 solve();
