@@ -12,13 +12,22 @@ function solve()
 	while (1)
     { 
         $iterations++;
-		$cheapest = NULL;
+		unset($cheapest);
 		foreach ($GLOBALS['osets'] as $node)
 		{
-			if ($cheapest == NULL)
+			if (!isset($cheapest))
 				$cheapest = $node;
-			if ($cheapest != NULL && $node->getFofX() < $cheapest->getFofX())
-				$cheapest = $node;
+			if ($GLOBALS['algo'] == ASTAR)
+				if (isset($cheapest) && $node->getFofX() < $cheapest->getFofX())
+					$cheapest = $node;
+			else if ($GLOBALS['algo'] == GREEDY)
+				if (isset($cheapest) && $node->getCost() < $cheapest->getCost())
+					$cheapest = $node;
+			else if ($GLOBALS['algo'] == DEPTHFIRST)
+				if (isset($cheapest) && $node->getDist() > $cheapest->getDist())
+					$cheapest = $node;
+			else //breadthfirst
+				break;
 		}
 		if ($cheapest == NULL)
             die ("No open set found\n");
@@ -53,6 +62,10 @@ function solve()
 		while (isset($GLOBALS['osets'][++$index]))
 			if ($cheapest->getId() === $GLOBALS['osets'][$index]->getId())
 				array_splice($GLOBALS['osets'], $index, 1);
+
+
+
+
 		if ($GLOBALS['verb'] == 1)
 			echo $cheapest . "\n";
 		else if ($iterations % 100 == 0)

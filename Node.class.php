@@ -153,6 +153,7 @@ class Node
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
+		unset($_grid, $_size ,$_emptyxy);
 		return($moves);
 	}
 
