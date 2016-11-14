@@ -7,7 +7,6 @@ function solve()
 
     $time = time();
     $iterations = 0;
-	$checked = array();
 	while (1)
     { 
         $iterations++;
@@ -39,15 +38,7 @@ function solve()
 		}
 		
 		foreach ($newnodes as $new)
-		{
-			if (in_array($new->getHash(), $checked) === FALSE)
-			{
-				$checked[] = $new->getHash();
-				$GLOBALS['osets'][] = $new;
-			}
-			else
-			echo "{$new->getHash()} already explored\n";
-		}
+			$GLOBALS['osets'][] = $new;
 
 		//Add cheapest to closed sets and remove from open sets
 		$GLOBALS['csets'][] = $cheapest;
@@ -55,7 +46,10 @@ function solve()
 		while (isset($GLOBALS['osets'][++$index]))
 			if ($cheapest->getId() === $GLOBALS['osets'][$index]->getId())
 				array_splice($GLOBALS['osets'], $index, 1);
-		echo $cheapest . "\n";
+		if ($GLOBALS['verb'] == 1)
+			echo $cheapest . "\n";
+		else if ($iterations % 100 == 0)
+			echo ".";
 	}
 }
 

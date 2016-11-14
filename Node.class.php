@@ -105,11 +105,12 @@ class Node
 			$hash = $this->makeHash($grid);
             $check = FALSE;
             foreach ($GLOBALS['csets'] as $cset)
-                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
+                if (strcmp($cset->getHash(), $hash) === 0)
                     $check = TRUE;
-            foreach ($GLOBALS['osets'] as $oset)
-                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
-                    $check = TRUE;
+			if ($check != TRUE)
+            	foreach ($GLOBALS['osets'] as $oset)
+                	if (strcmp($oset->getHash(), $hash) === 0)
+                    	$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -122,11 +123,12 @@ class Node
 			$hash = $this->makeHash($grid);
             $check = FALSE;
             foreach ($GLOBALS['csets'] as $cset)
-                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
+                if (strcmp($cset->getHash(), $hash) === 0)
                     $check = TRUE;
-            foreach ($GLOBALS['osets'] as $oset)
-                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
-                    $check = TRUE;
+			if ($check != TRUE)
+            	foreach ($GLOBALS['osets'] as $oset)
+                	if (strcmp($oset->getHash(), $hash) === 0)
+                    	$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -139,11 +141,12 @@ class Node
 			$hash = $this->makeHash($grid);
             $check = FALSE;
             foreach ($GLOBALS['csets'] as $cset)
-                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
+                if (strcmp($cset->getHash(), $hash) === 0)
                     $check = TRUE;
-            foreach ($GLOBALS['osets'] as $oset)
-                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
-                    $check = TRUE;
+			if ($check != TRUE)
+            	foreach ($GLOBALS['osets'] as $oset)
+                	if (strcmp($oset->getHash(), $hash) === 0)
+                    	$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
@@ -156,11 +159,12 @@ class Node
             $hash = $this->makeHash($grid);
             $check = FALSE;
             foreach ($GLOBALS['csets'] as $cset)
-                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
+                if (strcmp($cset->getHash(), $hash) === 0)
                     $check = TRUE;
-            foreach ($GLOBALS['osets'] as $oset)
-                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
-                    $check = TRUE;
+			if ($check != TRUE)
+            	foreach ($GLOBALS['osets'] as $oset)
+                	if (strcmp($oset->getHash(), $hash) === 0)
+                    	$check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
 		}
