@@ -44,7 +44,8 @@ class Node
 
 	public function __ToString()
 	{
-		return ("ID: {$this->_id}\t\tHash: {$this->_hash}\t\tDistance Travelled: {$this->_dist}\tCost: {$this->_estcost}\t\tParentID: {$this->_parent}");
+		return ("ID: " . str_pad($this->_id, 6) . "\tHash: {$this->_hash}\t\tDistance Travelled: " . str_pad($this->_dist, 3) . "\tCost: " . 
+		str_pad($this->_estcost, 3) . "\tFofX: "  . str_pad($this->_estcost + $this->_dist, 3) . "\tParentID: " . str_pad($this->_parent, 6));
 	}
 
 	public function getHash()
@@ -70,6 +71,11 @@ class Node
 	public function getFofX()
 	{
 		return ($this->_dist + $this->_estcost);
+	}
+
+	public function getCost()
+	{
+		return ($this->_estcost);
 	}
 
 	public function setCost($cost = NULL)
@@ -98,11 +104,11 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+            foreach ($GLOBALS['csets'] as $cset)
+                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
                     $check = TRUE;
             foreach ($GLOBALS['osets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
                     $check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
@@ -115,11 +121,11 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+            foreach ($GLOBALS['csets'] as $cset)
+                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
                     $check = TRUE;
             foreach ($GLOBALS['osets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
                     $check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
@@ -132,11 +138,11 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
 			$hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+            foreach ($GLOBALS['csets'] as $cset)
+                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
                     $check = TRUE;
             foreach ($GLOBALS['osets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
                     $check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
@@ -149,11 +155,11 @@ class Node
 			$grid [$this->_emptyxy['x']] [$this->_emptyxy['y']] = $temp;
             $hash = $this->makeHash($grid);
             $check = FALSE;
-            foreach ($GLOBALS['csets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+            foreach ($GLOBALS['csets'] as $cset)
+                if (strncmp($cset->getHash(), $hash, strlen($cset)) === 0)
                     $check = TRUE;
             foreach ($GLOBALS['osets'] as $oset)
-                if (strcmp($oset->getHash(), $hash) === 0)
+                if (strncmp($oset->getHash(), $hash, strlen($oset)) === 0)
                     $check = TRUE;
 			if (strcmp($this->_parentHash, $hash) !== 0 && $check == FALSE)
 				$moves[] = new Node($GLOBALS['idc']++, $this->_id, $hash, $GLOBALS['size'], $this->_dist + 1, $this->_hash);
