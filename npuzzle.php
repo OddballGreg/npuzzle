@@ -21,13 +21,13 @@ $GLOBALS['idc'] = 0; // ID counter
 $GLOBALS['size'] = 3; // Grid Size
 
 if (isset($argv[1]) && file_exists($argv[1]) == TRUE)
-	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, parse($argv[1]), $GLOBALS['size'], 0, NULL);
+	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, "Initial", parse($argv[1]), $GLOBALS['size'], 0, NULL);
 else
 {
 	echo "Invalid file or no puzzle given, automatically generating random 3x3 puzzle\n";
-	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, NULL, genPuzzle(), $GLOBALS['size'], 0, NULL); //genPuzzle() is undefined currently
+	$GLOBALS['osets'][] = new Node($GLOBALS['idc']++, "Initial", genPuzzle(), $GLOBALS['size'], 0, NULL); //genPuzzle() is undefined currently
 }
-$GLOBALS['sol'] = new Node("sol", NULL, $GLOBALS['osets'][0]->getHash(), $GLOBALS['size'], 0, NULL);
+$GLOBALS['sol'] = new Node("sol", "Solution", $GLOBALS['osets'][0]->getHash(), $GLOBALS['size'], 0, NULL);
 $GLOBALS['sol']->setGoal();
 $GLOBALS['hstc'] = HAMMING;
 
@@ -50,7 +50,7 @@ else
 $GLOBALS['osets'][0]->setCost();
 $GLOBALS['sol']->setCost(0);
 echo "\n" . $GLOBALS['osets'][0] . "\n";
-echo $GLOBALS['sol'] . "\n";
+echo $GLOBALS['sol'] . "\n\n";
 
 solve();
 

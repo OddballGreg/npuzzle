@@ -44,7 +44,7 @@ class Node
 
 	public function __ToString()
 	{
-		return ("ID: " . str_pad($this->_id, 6) . "\tHash: {$this->_hash}\t\tDistance Travelled: " . str_pad($this->_dist, 3) . "\tCost: " . 
+		return ("ID: " . str_pad($this->_id, 6) . "\tHash: {$this->_hash}\t\tDistance Travelled: " . str_pad($this->_dist, 3) . "\tEstCost: " . 
 		str_pad($this->_estcost, 3) . "\tFofX: "  . str_pad($this->_estcost + $this->_dist, 3) . "\tParentID: " . str_pad($this->_parent, 6));
 	}
 

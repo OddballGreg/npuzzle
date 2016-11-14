@@ -32,7 +32,8 @@ function solve()
             {
 				echo "Solution Found:\n";
                 printSolution($node);
-                echo "Solution found in " . (time() - $time) . " seconds after " . $iterations . " iterations.\n";
+				echo $GLOBALS['csets'][0];
+                echo "\nSolution found in " . (time() - $time) . " second(s) after " . $iterations . " iteration(s).\n";
 				die("\n");
 			}
 		}
