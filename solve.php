@@ -7,24 +7,14 @@ function solve()
 
     $time = time();
     $iterations = 0;
+	$nodes = 1;
+	$GLOBALS['checked'][] = $GLOBALS['osets'][0]->getHash();
 	while (1)
     { 
         $iterations++;
-		foreach ($GLOBALS['osets'] as $node)
-		{
-			if (strcmp($node->getHash(), $GLOBALS['sol']->getHash()) === 0)
-            {
-                echo $node->getHash() . " " . $GLOBALS['sol']->getHash() . "\n"; 
-				echo "Solution Found:\n";
-                printSolution($node);
-                echo "Solution found in " . (time() - $time) . " seconds after " . $iterations . " iterations.\n";
-				die('\n');
-			}
-		}
 		$cheapest = NULL;
 		foreach ($GLOBALS['osets'] as $node)
 		{
-			//echo $node . "\n";
 			if ($cheapest == NULL)
 				$cheapest = $node;
 			if ($cheapest != NULL && $node->getFofX() < $cheapest->getFofX())
@@ -32,20 +22,46 @@ function solve()
 		}
 		if ($cheapest == NULL)
             die ("No open set found\n");
-		$GLOBALS['osets'] = array_merge($GLOBALS['osets'], $cheapest->genMoves());
+
+		//Get new moves from cheapest node, compare to solution and add to open sets
+		$newnodes = $cheapest->genMoves();
 		//print_r($cheapest->genMoves());
+		//print_r($newnodes);
+		foreach ($newnodes as $node)
+		{
+			if (strcmp($node->getHash(), $GLOBALS['sol']->getHash()) === 0)
+            {
+				echo "Solution Found:\n";
+				echo $GLOBALS['csets'][0] . "\n";
+                printSolution($node);
+                echo "\nSolution found in " . (time() - $time) . " second(s) after " . $iterations . " iteration(s).\n";
+				echo "{$nodes} nodes were generated in order to find the " . $node->getDist() . " moves of the solution.\n";
+				die("\n");
+			}
+		}
+		
+		foreach ($newnodes as $new)
+		{
+			$GLOBALS['osets'][] = $new;
+			$GLOBALS['checked'][] = $new->getHash();
+			$nodes++;
+		}
+
+		//Add cheapest to closed sets and remove from open sets
 		$GLOBALS['csets'][] = $cheapest;
 		$index = -1;
 		while (isset($GLOBALS['osets'][++$index]))
-			if ($cheapest->getId() == $GLOBALS['osets'][$index]->getId())
-				$GLOBALS['osets'] = array_diff($GLOBALS['osets'], [$cheapest]);
-		echo $cheapest . "\n";
+			if ($cheapest->getId() === $GLOBALS['osets'][$index]->getId())
+				array_splice($GLOBALS['osets'], $index, 1);
+		if ($GLOBALS['verb'] == 1)
+			echo $cheapest . "\n";
+		else if ($iterations % 100 == 0)
+			echo ".";
 	}
 }
 
 function printSolution($endNode)
 {
-    echo $endNode . "\n";
 	$pid = $endNode->getParent();
 	foreach ($GLOBALS['osets'] as $node)
 	{
@@ -60,6 +76,7 @@ function printSolution($endNode)
 		if ($tid != NULL && $tid == $pid)
 			printSolution($node);
 	}
+	echo $endNode . "\n";
 }
 
 ?>

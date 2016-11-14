@@ -50,24 +50,27 @@ function isSolvable($grid)
     $line = array($GLOBALS['size'] * $GLOBALS['size']);
     $max = $GLOBALS['size'] * $GLOBALS['size'];
     $inversions = 0;
-    //$GLOBALS['size'];
     for ($y = 0; $y < $GLOBALS['size']; $y++) {
         for ($x = 0; $x < $GLOBALS['size']; $x++) {
             $line[] = $grid[$x][$y];
-            if ( $grid[$x][$y] == 0)
-                    $blank = $y;
+            if ($grid[$x][$y] == 0)
+                $blank = $y;
         }
     }
-    for($i = 0; $i < $max - 1; $i++){
-        for ($j = $i + 1; $j < $max; $j++)
-        {
+    for ($i = 0; $i < $max - 1; $i++) {
+        for ($j = $i + 1; $j < $max; $j++) {
             if ($line[$i] > $line[$j] && $line[$i] != 0 && $line[$j] != 0)
                 $inversions++;
         }
     }
-    if (($GLOBALS['size'] % 2 == 1 && $inversions % 2 == 0) ||
-        ($GLOBALS['size'] % 2 == 0 && (($GLOBALS['size'] - $blank) % 2 == $inversions % 2)))
+    if (($GLOBALS['size'] % 2 == 1 && $inversions % 2 == 0)) {
+        echo "odd puzel even inverces\n";
         return true;
+    }
+    if ($GLOBALS['size'] % 2 == 0 && (($GLOBALS['size'] - $blank) % 2 == $inversions % 2)) {
+        echo "even puzzel ". ($GLOBALS['size'] - $blank) % 2 . "\n";
+        return true;
+    }
     return false;
 }
 
