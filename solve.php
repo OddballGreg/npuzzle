@@ -7,6 +7,8 @@ function solve()
 
     $time = time();
     $iterations = 0;
+	$nodes = 1;
+	$GLOBALS['checked'][] = $GLOBALS['osets'][0]->getHash();
 	while (1)
     { 
         $iterations++;
@@ -30,15 +32,20 @@ function solve()
 			if (strcmp($node->getHash(), $GLOBALS['sol']->getHash()) === 0)
             {
 				echo "Solution Found:\n";
+				echo $GLOBALS['csets'][0] . "\n";
                 printSolution($node);
-				echo $GLOBALS['csets'][0];
                 echo "\nSolution found in " . (time() - $time) . " second(s) after " . $iterations . " iteration(s).\n";
+				echo "{$nodes} nodes were generated in order to find the " . $node->getDist() . " moves of the solution.\n";
 				die("\n");
 			}
 		}
 		
 		foreach ($newnodes as $new)
+		{
 			$GLOBALS['osets'][] = $new;
+			$GLOBALS['checked'][] = $new->getHash();
+			$nodes++;
+		}
 
 		//Add cheapest to closed sets and remove from open sets
 		$GLOBALS['csets'][] = $cheapest;
@@ -55,7 +62,6 @@ function solve()
 
 function printSolution($endNode)
 {
-    echo $endNode . "\n";
 	$pid = $endNode->getParent();
 	foreach ($GLOBALS['osets'] as $node)
 	{
@@ -70,6 +76,7 @@ function printSolution($endNode)
 		if ($tid != NULL && $tid == $pid)
 			printSolution($node);
 	}
+	echo $endNode . "\n";
 }
 
 ?>
