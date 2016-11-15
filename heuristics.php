@@ -31,9 +31,9 @@ function euclidean($node, $solution)
 	{
 		$sxy = findxy($sgrid, $value);
 		$nxy = findxy($ngrid, $value);
-		$cost[] = abs(abs($sxy['x'] - $nxy['x']) + abs($sxy['y'] - $nxy['y'])); // Euclidean Distance requires refactoring
+		$cost[] = sqrt(pow(($sxy['x'] - $nxy['x']),2) + pow(($sxy['y'] - $nxy['y']),2)); // Euclidean Distance requires refactoring
 	}
-	return(array_sum($cost));
+	return(floor(array_sum($cost)));
 }
 
 function manhattan($node, $solution)
@@ -46,15 +46,13 @@ function manhattan($node, $solution)
 		$shash = array_merge($shash, explode(' ', $line));
 	foreach ($shash as $value)
 	{
-		$sxy = findxy($sgrid, $value);
-		$nxy = findxy($ngrid, $value);
-        $new['x'] = abs($sxy['x'] - $nxy['x']);
-        if ($new['x'] > 1)
-            $new['x']--;
-        $new['y'] = abs($sxy['y'] - $nxy['y']);
-        if ($new['y'] > 1)
-            $new['y']--;
-        $cost[] = $new['y'] + $new['x']; 
+	    if ($value != 0) {
+            $sxy = findxy($sgrid, $value);
+            $nxy = findxy($ngrid, $value);
+            $new['x'] = abs($sxy['x'] - $nxy['x']);
+            $new['y'] = abs($sxy['y'] - $nxy['y']);
+            $cost[] = $new['y'] + $new['x'];
+        }
 	}
 	return(array_sum($cost));
 }

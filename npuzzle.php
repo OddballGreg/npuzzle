@@ -36,7 +36,6 @@ if (isSolvable($GLOBALS['osets'][0]->getGrid())) {
     $GLOBALS['sol']->setGoal();
     $GLOBALS['hstc'] = HAMMING;
 
-
     echo "\nPlease select the algorithm you would like to use to solve this puzzle...";
     echo "\n(1) AStar\n(2) Greedy\n(3) Breadth-First\n(4) Depth-First\n";
     algo:
