@@ -26,8 +26,7 @@ function euclidean($node, $solution)
 	$preshash = explode(",", $solution->getHash());
 	$shash = array();
 	foreach ($preshash as $line) 
-		$shash = array_merge($shash, explode(' ', $line)); 
-	$cost;
+		$shash = array_merge($shash, explode(' ', $line));
 	foreach ($shash as $value)
 	{
 		$sxy = findxy($sgrid, $value);
@@ -44,8 +43,7 @@ function manhattan($node, $solution)
 	$preshash = explode(",", $solution->getHash());
 	$shash = array();
 	foreach ($preshash as $line) 
-		$shash = array_merge($shash, explode(' ', $line)); 
-	$cost;
+		$shash = array_merge($shash, explode(' ', $line));
 	foreach ($shash as $value)
 	{
 		$sxy = findxy($sgrid, $value);
