@@ -21,8 +21,12 @@ function parse($fileName)
     foreach ($contents as $line)
     {
         $line = explode("#", $line)[0];
-        if (strlen($line) > 5)
+        if (strlen($line) > 5) {
+            $line = expload(" ", $line);
+            $line = array_diff($line, [NULL]);
+            $line = implode(" ", $line);
             $hash = $hash . trim($line) . ",";
+        }
     }
     return (trim($hash, ',')); //Implement checks to make sure that the supplied puzzle is valid
 }
