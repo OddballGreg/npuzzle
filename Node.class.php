@@ -2,6 +2,7 @@
 
 class Node
 {
+
 	private $_parentHash;
 	private $_hash;
 	private $_grid;
@@ -159,21 +160,68 @@ class Node
 
 	public function setGoal()
 	{
-		$x = 0;
-		$y = -1; 
-		$dir = 1;
-		$count = 0;
-		while (isset($this->_grid[$x]))
-		{
-			while (isset($this->_grid[$x][$y = $y + $dir]))
-				$this->_grid[$x][$y] = $count++;
-			if ($dir == 1)
-				$dir = -1;
-			else
-				$dir = 1;
-			$x++;
-		}
-		$this->_hash = $this->makeHash($this->_grid);
+		$size = $this->_size;
+        $xiter = 0;
+        $yiter = 0;
+        $dir = 1;
+        $xmax = $size;
+        $ymax = $size;
+        $xmin = -1;
+        $ymin = -1;
+        $count = 1;
+        $cap = $size * $size;
+
+        while ($count < $cap) {
+            if ($dir == 1) {
+                while ($yiter < $ymax) {
+                    $this->_grid[$xiter][$yiter] = $count;
+                    $yiter++;
+                    $count++;
+                }
+
+                $xiter++;
+                $yiter--;
+
+                while ($xiter < $xmax) {
+                    $this->_grid[$xiter][$yiter] = $count;
+                    $xiter++;
+                    $count++;
+                }
+                $xiter--;
+                $yiter--;
+                $xmin++;
+                $ymax--;
+                $dir = -1;
+            } else {
+//swich direction
+
+                while ($yiter > $ymin) {
+                    $this->_grid[$xiter][$yiter] = $count;
+                    $yiter--;
+                    $count++;
+                }
+
+                $yiter++;
+                $xiter--;
+
+                while ($xiter > $xmin) {
+                    $this->_grid[$xiter][$yiter] = $count;
+                    $xiter--;
+                    $count++;
+                }
+
+                $xiter++;
+                $yiter++;
+                $xmax--;
+                $ymin++;
+
+                $dir = 1;
+            }
+        }
+
+        $this->_grid[$xiter][$yiter] = 0;
+
+        $this->_hash = $this->makeHash($this->_grid);
 	}
 
 	private function makeHash($grid)
