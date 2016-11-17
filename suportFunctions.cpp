@@ -23,23 +23,25 @@ bool file_exists(const std::string &name) {
 
 bool in_array(int val, int *arr, int size) {
     int iter = -1;
-    while (++iter < size)
-        if (arr[iter] == val)
+    while (++iter < size) {
+        if (arr[iter] == val) {
             return true;
+        }
+    }
     return false;
 }
 
 string genPuzzle(int size) {
-    int grid[size][size];
-    int max = size * size - 1;
-    int used[max + 1];
+    cout << "gen puzzel called" << endl;
+    int max = size * size;
+    int used[max];
     int iter = 0;
     string hash;
 
     for (int xiter = 0; xiter < g_size; xiter++) {
         for (int yiter = 0; yiter < g_size; yiter++) {
             int newNum = rand() % max;
-            while (in_array(newNum, used, iter + 1)) {
+            while (in_array(newNum, used, iter)) {
                 newNum = rand() % max;
             }
             used[iter++] = newNum;
@@ -50,6 +52,7 @@ string genPuzzle(int size) {
         if (xiter != g_size - 1)
             hash += ',';
     }
+    cout << " gen puzzel exiting" << endl;
     return (hash);
 }
 
@@ -140,7 +143,8 @@ bool isSolvable(int **grid) {
         }
     }
     cout << "num inversions " << inversions << "\n";
-    cout << "blank odd even " << ((g_size - blank) % 2) << " actual value "<<(g_size - blank) << " blank " << blank <<"\n";
+    cout << "blank odd even " << ((g_size - blank) % 2) << " actual value " << (g_size - blank) << " blank " << blank
+         << "\n";
     if ((g_size % 2 == 1 && inversions % 2 == 0)) {
         cout << "odd puzel even inverces\n";
         return true;

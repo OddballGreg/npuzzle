@@ -15,33 +15,100 @@
 
 #include <math.h>
 #include "suportFunctions.h"
-#include "Node.h"
+
 
 typedef struct s_point {
     int x;
     int y;
 } t_point;
 
-Node *g_sol; // Solution
-vector<Node> g_osets; // Open Sets
-vector<Node> g_csets; // Closed Sets
-vector<string> g_checked;
-int g_idc = 0; // ID counter
-int g_size = 3;
-int g_hstc = -1;
-int g_algo = -1;
-int g_verb = -1;
+using namespace std;
 
 
-int hamming(Node *node, Node *solution);
+extern int g_idc; // ID counter
+extern int g_size;
+extern int g_hstc;
+extern int g_algo;
+extern int g_verb;
 
-int manhattan(Node *node, Node *solution);
+class Node {
+private:
+    string _parentHash;
+public:
+    Node();
 
-int euclidean(Node *node, Node *solution);
+private:
+    string _hash;
+    int **_grid;
+    int _parentID;
+    int _id;
+    int _size;
+    int _dist;
+    int _estcost;
+    struct s_point _emptyxy;
+public:
+    Node(int id, int parent, string hash, int size, int dist, string parentHash);
+
+    string getHash() {
+        return (this->_hash);
+    }
+
+    int **getGrid() {
+        return (this->_grid);
+    }
+
+    int getParent() {
+        return (this->_parentID);
+    }
+
+    int getId() {
+        return (this->_id);
+    }
+
+    int getFofX() {
+        return (this->_dist + this->_estcost);
+    }
+
+    int getCost() {
+        return (this->_estcost);
+    }
+
+    int getDist() {
+        return (this->_dist);
+    }
+
+    void setCost(int *cost = NULL);
+
+    vector<Node> genMoves();
+
+    void setGoal();
+
+    void printGrid();
+
+    void makeMove(int x,int y ,vector<Node> *moves);
+
+    string makeHash(int **grid);
+
+    string toString();
+};
+
+extern Node *g_sol; // Solution
+extern vector<Node> g_osets; // Open Sets
+extern vector<Node> g_csets; // Closed Sets
+extern vector<string> g_checked;
+
+int hamming(Node *node);
+
+int manhattan(Node *node);
+
+int euclidean(Node *node);
 
 void solve();
 
-t_point findxy(int grid[g_size][g_size], int number);
+t_point findxy(int **grid, int number);
 
+string parse(std::string fileName);
+
+void printSolution(Node *endNode);
 
 #endif //NPUZZELC_NPUZZLE_H

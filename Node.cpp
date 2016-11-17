@@ -2,120 +2,94 @@
 // Created by Robert JONES on 2016/11/16.
 //
 
-#include "Node.h"
+#include "npuzzle.h"
 
 
 //id of -1 representes a solution state
 
-Node::Node(int id, int parentID, string hash, int size, int dist ,const string &parentHash)
-{
+Node::Node(int id, int parentID, string hash, int size, int dist, string parentHash) {
     this->_id = id;
     this->_parentID = parentID;
     this->_size = size;
     this->_dist = dist;
     this->_parentHash = parentHash;
-    this->_grid = (int**)malloc(sizeof(int) * size*size);
+    this->_grid = (int **) malloc(sizeof(int *) * size);
     this->_hash = hash;
     vector<string> rows = explode(hash, ',');
     int x = -1;
-    while (++x < size)
-    {
+    while (++x < size) {
         int y = -1;
         vector<string> cols = explode(rows.at(x), ' ');
-        while (++y < size)
-            _grid[x][y] = atoi(cols.at(y).data());
-            if (this->_grid[x][y] == 0)
-            {
+        this->_grid[x] = (int *) malloc(sizeof(int) * size);
+        while (++y < size && y < cols.size()) {
+            this->_grid[x][y] = atoi(cols.at(y).c_str());
+            if (this->_grid[x][y] == 0) {
                 this->_emptyxy.x = x;
                 this->_emptyxy.y = y;
             }
+        }
     }
-
-    if (this->_id != -1 && this->_id != 0) // Cost setting is dependent on the solution existing. The solution is derived from the initial state.
+    if (this->_id != -1 && this->_id !=
+                           0) // Cost setting is dependent on the solution existing. The solution is derived from the initial state.
         setCost();
 }
 
-void Node::setCost(int *cost = NULL){
+void Node::setCost(int *cost) {
     if (cost != NULL)
         this->_estcost = *cost;
-    else
-    {
-        if (g_hstc == MANHATTAN){
-            this->_estcost = manhattan(this, g_sol);
-        }
-        else if (g_hstc == EUCLIDEAN){
-            this->_estcost = euclidean(this, g_sol);
-        }
-        else{
-            this->_estcost = hamming(this, g_sol);
+    else {
+        if (g_hstc == MANHATTAN) {
+            this->_estcost = manhattan(this);
+        } else if (g_hstc == EUCLIDEAN) {
+            this->_estcost = euclidean(this);
+        } else {
+            this->_estcost = hamming(this);
         }
     }
 }
 
-vector<Node> Node::genMoves()
-{
-    vector<Node> moves;
-    int **grid = this->_grid;
-    int temp;
+void Node::makeMove(int x, int y, vector<Node> *moves) {
+    int **grid;
+
     string hash;
     bool check;
-    
-    if (_emptyxy.x + 1 < g_size)
-    {
-        temp = grid [this->_emptyxy.x + 1] [this->_emptyxy.y];
-        grid [this->_emptyxy.x + 1] [this->_emptyxy.y] = grid [this->_emptyxy.x] [this->_emptyxy.y];
-        grid [this->_emptyxy.x] [this->_emptyxy.y] = temp;
+    if (!(grid = (int **) malloc(sizeof(int *) * g_size)))
+        return;
+    for (int x = 0; x < g_size; x++) {
+        if (!(grid[x] = (int *) malloc(sizeof(int) * g_size)))
+            return;
+        for (int y = 0; y < g_size; y++) {
+            grid[x][y] = this->_grid[x][y];
+        }
+    }
+
+    if (_emptyxy.x + x < g_size && _emptyxy.y + y < g_size && _emptyxy.x + x > -1 && _emptyxy.y + y > -1) {
+        grid[_emptyxy.x][_emptyxy.y] = this->_grid[_emptyxy.x + x][_emptyxy.y + y];
+        grid[_emptyxy.x + x][_emptyxy.y + y] = this->_grid[_emptyxy.x][_emptyxy.y];
         hash = this->makeHash(grid);
         check = false;
-        if((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
+        if ((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
             check = true;
-        if (strcmp(this->_parentHash, hash) != 0 && check == false)
-            moves.push_back((const Node &) new Node(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash));
+        if (strcmp(this->_parentHash.data(), hash.data()) != 0 && check == false) {
+            Node tmp(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash);
+            moves->push_back(tmp);
+        }
     }
-    grid = this->_grid;
-    if (this->_emptyxy.x - 1 > -1)
-    {
-        temp = grid [this->_emptyxy.x - 1] [this->_emptyxy.y];
-        grid [this->_emptyxy.x - 1] [this->_emptyxy.y] = grid [this->_emptyxy.x] [this->_emptyxy.y];
-        grid [this->_emptyxy.x] [this->_emptyxy.y] = temp;
-        hash = this->makeHash(grid);
-        check = false;
-        if((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
-            check = true;
-        if (strcmp(this->_parentHash, hash) != 0 && check == false)
-            moves.push_back((const Node &) new Node(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash));
-    }
-    grid = this->_grid;
-    if (this->_emptyxy.y + 1 < g_size)
-    {
-        temp = grid [this->_emptyxy.x] [this->_emptyxy.y  + 1];
-        grid [this->_emptyxy.x] [this->_emptyxy.y  + 1] = grid [this->_emptyxy.x] [this->_emptyxy.y];
-        grid [this->_emptyxy.x] [this->_emptyxy.y] = temp;
-        hash = this->makeHash(grid);
-        check = false;
-        if((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
-            check = true;
-        if (strcmp(this->_parentHash, hash) != 0 && check == false)
-            moves.push_back((const Node &) new Node(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash));
-    }
-    grid = this->_grid;
-    if (this->_emptyxy.y - 1 > -1)
-    {
-        temp = grid [this->_emptyxy.x] [this->_emptyxy.y - 1];
-        grid [this->_emptyxy.x] [this->_emptyxy.y  - 1] = grid [this->_emptyxy.x] [this->_emptyxy.y];
-        grid [this->_emptyxy.x] [this->_emptyxy.y] = temp;
-        hash = this->makeHash(grid);
-        check = false;
-        if((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
-            check = true;
-        if (strcmp(this->_parentHash, hash) != 0 && check == false)
-            moves.push_back((const Node &) new Node(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash));
-    }
-    return(moves);
+    delete[] grid;
 }
 
-void Node::setGoal()
-{
+vector<Node> Node::genMoves() {
+    vector<Node> moves;
+
+    makeMove(1, 0, &moves);
+    makeMove(0, 1, &moves);
+    makeMove(0, -1, &moves);
+    makeMove(-1, 0, &moves);
+
+    return (moves);
+}
+
+void Node::setGoal() {
     int size = this->_size;
     int xiter = 0;
     int yiter = 0;
@@ -180,8 +154,7 @@ void Node::setGoal()
     this->_hash = this->makeHash(this->_grid);
 }
 
-string Node::makeHash(int **grid)
-{
+string Node::makeHash(int **grid) {
     string hash;
 
     for (int xiter = 0; xiter < g_size; xiter++) {
@@ -196,9 +169,21 @@ string Node::makeHash(int **grid)
     return (hash);
 }
 
-string Node::toString()
-{
-    char *line[300];
-    sprintf(line, "ID: %d \tHash: %s \tDistance Travelled: %d \tEstCost: %d tFofX: %d\tParentID: %d\n" ,
-            this->_id , this->_hash ,this->_dist, this->_estcost, this->_estcost + this->_dist, this->_parentID);
+void Node::printGrid() {
+    for (int x = 0; x < g_size; x++) {
+        for (int y = 0; y < g_size; ++y) {
+            cout << this->_grid[x][y] << " ";
+        }
+        cout << endl;
+    }
 }
+
+string Node::toString() {
+    char line[300];
+    sprintf(line, "ID: %d \tHash: %s \tDistance Travelled: %d \tEstCost: %d tFofX: %d\tParentID: %d\n",
+            this->_id, this->_hash.c_str(), this->_dist, this->_estcost, this->_estcost + this->_dist, this->_parentID);
+    string re(line);
+    return (re);
+}
+
+Node::Node() {}
