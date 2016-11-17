@@ -87,7 +87,8 @@ if (isSolvable($GLOBALS['osets'][0]->getGrid())) {
     echo $GLOBALS['sol'] . "\n\n";
 
     solve();
-} else
-    echo "puzzle is unsolvable\n";
+} 
+else
+    echo "Puzzle is unsolvable.\n";
 
 ?>

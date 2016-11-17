@@ -15,20 +15,20 @@ function parse($fileName)
     else if ($size < 3)
         die("Puzzle is too small.\n");
     $GLOBALS['size'] = (int)trim($contents[0]);
-    echo "global size " . $GLOBALS['size']."\n";
+    //echo "global size " . $GLOBALS['size']."\n";
     $contents = array_splice($contents, 1);
     $hash = NULL;
     foreach ($contents as $line)
     {
         $line = explode("#", $line)[0];
         if (strlen($line) > 5) {
-            $line = expload(" ", $line);
+            $line = explode(" ", $line);
             $line = array_diff($line, [NULL]);
             $line = implode(" ", $line);
             $hash = $hash . trim($line) . ",";
         }
     }
-    return (trim($hash, ',')); //Implement checks to make sure that the supplied puzzle is valid
+    return (trim($hash, ','));
 }
 
 function genPuzzle()
@@ -71,7 +71,6 @@ function isSolvable($grid)
 
         }
     }
-    print_r($line);
     for ($i = 0; $i < $max ; $i++) {
         for ($j = $i + 1; $j < $max; $j++) {
             if ($line[$i] > $line[$j]) {
@@ -79,15 +78,10 @@ function isSolvable($grid)
             }
         }
     }
-    echo "num inversions " . $inversions . "\n";
-    if (($GLOBALS['size'] % 2 == 1 && $inversions % 2 == 1)) {
-        echo "odd puzel even inverces\n";
+    if (($GLOBALS['size'] % 2 == 1 && $inversions % 2 == 1))
         return true;
-    }
-    if ($GLOBALS['size'] % 2 == 0 && (($GLOBALS['size'] - $blank) % 2 != $inversions % 2)) {
-        echo "even puzzel " . ($GLOBALS['size'] - $blank) % 2 . "\n";
+    if ($GLOBALS['size'] % 2 == 0 && (($GLOBALS['size'] - $blank) % 2 != $inversions % 2))
         return true;
-    }
     return false;
 }
 
