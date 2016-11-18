@@ -45,10 +45,12 @@ void Node::setCost(int *cost) {
         } else {
             this->_estcost = hamming(this);
         }
+        if (g_penilty == 1)
+            this->_estcost += penilty(this->_grid);
     }
 }
 
-void Node::makeMove(int x, int y, vector<Node> *moves) {
+void Node::makeMove(int x, int y, vector<Node*> *moves) {
     int **grid;
 
     string hash;
@@ -70,16 +72,19 @@ void Node::makeMove(int x, int y, vector<Node> *moves) {
         check = false;
         if ((std::find(g_checked.begin(), g_checked.end(), hash) != g_checked.end()))
             check = true;
-        if (strcmp(this->_parentHash.data(), hash.data()) != 0 && check == false) {
-            Node tmp(g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash);
-            moves->push_back(tmp);
+        if (strcmp(this->_parentHash.c_str(), hash.c_str()) != 0 && !check) {
+            //cout << "adding: " << hash << endl;
+            moves->push_back(new Node (g_idc++, this->_id, hash, g_size, this->_dist + 1, this->_hash));
         }
+    }
+    for (int x = 0; x < g_size; x++) {
+        delete[] grid[x];
     }
     delete[] grid;
 }
 
-vector<Node> Node::genMoves() {
-    vector<Node> moves;
+vector<Node*> Node::genMoves() {
+    vector<Node*> moves;
 
     makeMove(1, 0, &moves);
     makeMove(0, 1, &moves);
@@ -159,7 +164,7 @@ string Node::makeHash(int **grid) {
 
     for (int xiter = 0; xiter < g_size; xiter++) {
         for (int yiter = 0; yiter < g_size; yiter++) {
-            hash += (grid[xiter][yiter] + '0');
+            hash += to_string(grid[xiter][yiter]);
             if (yiter != g_size - 1)
                 hash += ' ';
         }
@@ -180,10 +185,17 @@ void Node::printGrid() {
 
 string Node::toString() {
     char line[300];
-    sprintf(line, "ID: %d \tHash: %s \tDistance Travelled: %d \tEstCost: %d tFofX: %d\tParentID: %d\n",
+    sprintf(line, "ID: %6d \tHash: %s \tDistance Travelled: %3d \tEstCost: %3d tFofX: %3d\tParentID: %10d\n",
             this->_id, this->_hash.c_str(), this->_dist, this->_estcost, this->_estcost + this->_dist, this->_parentID);
     string re(line);
     return (re);
 }
 
 Node::Node() {}
+
+Node::~Node() {
+    for (int i = 0; i < _size; ++i) {
+        delete[] _grid[i];
+    }
+    delete[] _grid;
+}

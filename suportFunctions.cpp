@@ -72,7 +72,7 @@ bool isSolvable(int **grid) {
     int line[max];
     int blank;
     // find state
-    while (count < cap) {
+    while (count < max) {
         if (dir == 1) {
             while (yiter < ymax) {
                 if (grid[xiter][yiter] != 0)
@@ -90,7 +90,6 @@ bool isSolvable(int **grid) {
                     line[count++] = grid[xiter][yiter];
                 else {
                     blank = xiter;
-                    count++;
                 }
                 xiter++;
             }
@@ -107,7 +106,6 @@ bool isSolvable(int **grid) {
                     line[count++] = grid[xiter][yiter];
                 else {
                     blank = xiter;
-                    count++;
                 }
                 yiter--;
             }
@@ -120,7 +118,6 @@ bool isSolvable(int **grid) {
                     line[count++] = grid[xiter][yiter];
                 else {
                     blank = xiter;
-                    count++;
                 }
                 xiter--;
             }
@@ -154,4 +151,16 @@ bool isSolvable(int **grid) {
         return true;
     }
     return false;
+}
+
+void ft_exit(string msg, int exitcode)
+{
+    cout << msg<<endl;
+    for (vector<Node*>::iterator it = g_osets.begin();  it < g_osets.end(); it++) {
+        delete(*it);
+    }
+    for (vector<Node*>::iterator it = g_csets.begin();  it < g_csets.end(); it++) {
+        delete(*it);
+    }
+    exit(exitcode);
 }

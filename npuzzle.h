@@ -30,6 +30,7 @@ extern int g_size;
 extern int g_hstc;
 extern int g_algo;
 extern int g_verb;
+extern int g_penilty;
 
 class Node {
 private:
@@ -46,6 +47,9 @@ private:
     int _dist;
     int _estcost;
     struct s_point _emptyxy;
+public:
+    virtual ~Node();
+
 public:
     Node(int id, int parent, string hash, int size, int dist, string parentHash);
 
@@ -79,13 +83,13 @@ public:
 
     void setCost(int *cost = NULL);
 
-    vector<Node> genMoves();
+    vector<Node*> genMoves();
 
     void setGoal();
 
     void printGrid();
 
-    void makeMove(int x,int y ,vector<Node> *moves);
+    void makeMove(int x,int y ,vector<Node*> *moves);
 
     string makeHash(int **grid);
 
@@ -93,8 +97,8 @@ public:
 };
 
 extern Node *g_sol; // Solution
-extern vector<Node> g_osets; // Open Sets
-extern vector<Node> g_csets; // Closed Sets
+extern vector<Node *> g_osets; // Open Sets
+extern vector<Node *> g_csets; // Closed Sets
 extern vector<string> g_checked;
 
 int hamming(Node *node);
@@ -110,5 +114,7 @@ t_point findxy(int **grid, int number);
 string parse(std::string fileName);
 
 void printSolution(Node *endNode);
+
+int penilty(int **grid);
 
 #endif //NPUZZELC_NPUZZLE_H

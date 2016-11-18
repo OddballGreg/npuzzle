@@ -19,4 +19,5 @@ std::string genPuzzle(int size);
 bool isSolvable(int **grid);
 bool in_array(int val, int *arr, int size);
 std::string parse(std::string fileName);
+void ft_exit(std::string msg, int exitcode);
 #endif //NPUZZELC_SUPORTFUNCTIONS_H

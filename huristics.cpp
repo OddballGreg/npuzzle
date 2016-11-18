@@ -12,9 +12,9 @@ int hamming(Node *node) {
     int xindex = -1;
     int yindex;
     int cost = 0;
-    while (xindex < g_size) {
+    while (++xindex < g_size) {
         yindex = -1;
-        while (yindex < -1) {
+        while (++yindex < g_size) {
             if (ngrid[xindex][yindex] != sgrid[xindex][yindex])
                 cost++;
         }
@@ -64,6 +64,82 @@ int manhattan(Node *node) {
         }
     }
     return (cost);
+}
+
+int penilty(int **grid) {
+    int max = g_size * g_size - 1;
+    int peniltys = 0;
+    int size = g_size;
+    int xiter = 0;
+    int yiter = 0;
+    int dir = 1;
+    int xmax = size;
+    int ymax = size;
+    int xmin = -1;
+    int ymin = -1;
+    int count = 0;
+    int cap = size * size;
+    int line[max];
+    // find state
+    while (count < max) {
+        if (dir == 1) {
+            while (yiter < ymax) {
+                if (grid[xiter][yiter] != 0)
+                    line[count++] = grid[xiter][yiter];
+                yiter++;
+            }
+            xiter++;
+            yiter--;
+
+            while (xiter < xmax) {
+                if (grid[xiter][yiter] != 0)
+                    line[count++] = grid[xiter][yiter];
+                xiter++;
+            }
+            xiter--;
+            yiter--;
+            xmin++;
+            ymax--;
+            dir = -1;
+        } else {
+//swich direction
+
+            while (yiter > ymin) {
+                if (grid[xiter][yiter] != 0)
+                    line[count++] = grid[xiter][yiter];
+                yiter--;
+            }
+
+            yiter++;
+            xiter--;
+
+            while (xiter > xmin) {
+                if (grid[xiter][yiter] != 0)
+                    line[count++] = grid[xiter][yiter];
+                xiter--;
+            }
+
+            xiter++;
+            yiter++;
+            xmax--;
+            ymin++;
+
+            dir = 1;
+        }
+    }
+
+    // eval state
+    for (int i = 0; i < max ; i += g_size) {
+        for (int x = i; x < (i + g_size - 1); x++){
+            for (int y = x + 1; y < (i + g_size); y++)
+            {
+                if (line[x] > line[y])
+                    peniltys++;
+            }
+        }
+    }
+    return peniltys;
+
 }
 
 t_point findxy(int **grid, int number) {
