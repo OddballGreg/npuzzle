@@ -25,7 +25,7 @@ void solve() {
         exit(EXIT_SUCCESS);
     }
 
-    //time = time();
+    time_t times = time(NULL);
     int iterations = 0;
     int nodes = 1;
     g_checked.push_back(g_osets.at(0)->getHash());
@@ -61,12 +61,13 @@ void solve() {
         vector<Node*> newnodes = cheapest->genMoves();
         for (vector<Node*>::iterator node = newnodes.begin(); node < newnodes.end(); node++) {
             if (strcmp((*node)->getHash().c_str(), g_sol->getHash().c_str()) == 0) {
+                time_t timee = time(NULL);
                 cout << "\n\nSolution Found:\n";
                 cout << (*node)->toString() << "\n";
                 cout << "steps to solution:\n";
                 printSolution((*node));
-                //cout << "\nSolution found in " << (time() - time) << " second(s) after "<< iterations << " iteration(s).\n";
-                cout << "{nodes} nodes were generated in order to find the " << (*node)->getDist()
+                cout << "\nSolution found in " << ((timee - times)/3600) << " second(s) after "<< iterations << " iteration(s).\n";
+                cout << nodes << " nodes were generated in order to find the " << (*node)->getDist()
                      << " moves of the solution.\n";
                 cout << "open list: " << g_osets.size() << " closed set " << g_csets.size() << " \n";
                 cout << "\n";
@@ -78,7 +79,7 @@ void solve() {
         for (vector<Node*>::iterator newNode = newnodes.begin(); newNode < newnodes.end(); newNode++) {
             g_osets.push_back((*newNode));
             g_checked.push_back((*newNode)->getHash());
-            //delete (*newNode);
+            nodes++;
         }
 
         //Add cheapest to closed sets and remove from open sets

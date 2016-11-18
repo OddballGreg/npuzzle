@@ -5,9 +5,12 @@
 #include "npuzzle.h"
 
 void processLine(string *build, string line, int lineCount) {
-    vector<string> col = explode(line, ' ');
+    vector<string> col = explode(line, (char *)(" "));
     if (col.size() != g_size) {
-        cout << "the number of colums in lin '" << line << "' is incorect" << endl;
+        cout << "the number of colums in lin '" << line << "' is incorect there are " << col.size() << endl;
+        for (vector<string>::iterator it = col.begin(); it < col.end(); it++) {
+            cout << *it << endl;
+        }
         exit(EXIT_SUCCESS);
     }
     for (vector<string>::iterator it = col.begin(); it < col.end(); it++) {

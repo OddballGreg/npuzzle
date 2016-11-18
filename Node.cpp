@@ -15,11 +15,11 @@ Node::Node(int id, int parentID, string hash, int size, int dist, string parentH
     this->_parentHash = parentHash;
     this->_grid = (int **) malloc(sizeof(int *) * size);
     this->_hash = hash;
-    vector<string> rows = explode(hash, ',');
+    vector<string> rows = explode(hash, (char*)(","));
     int x = -1;
     while (++x < size) {
         int y = -1;
-        vector<string> cols = explode(rows.at(x), ' ');
+        vector<string> cols = explode(rows.at(x), (char*)(" "));
         this->_grid[x] = (int *) malloc(sizeof(int) * size);
         while (++y < size && y < cols.size()) {
             this->_grid[x][y] = atoi(cols.at(y).c_str());

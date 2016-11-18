@@ -13,7 +13,7 @@
 #include <iostream>
 #include <fstream>
 
-std::vector<std::string> explode(std::string const & s, char delim);
+std::vector<std::string> explode(std::string s, char *delim);
 bool file_exists (const std::string& name);
 std::string genPuzzle(int size);
 bool isSolvable(int **grid);

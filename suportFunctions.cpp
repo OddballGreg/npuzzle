@@ -5,15 +5,21 @@
 #include "suportFunctions.h"
 #include "npuzzle.h"
 
-std::vector<std::string> explode(std::string const &s, char delim) {
-    std::vector<std::string> result;
-    std::istringstream iss(s);
-
-    for (std::string token; std::getline(iss, token, delim);) {
-        result.push_back(std::move(token));
+std::vector<std::string> explode(std::string s, char *delim) {
+    //return result;
+    std::vector<std::string> re;
+    char * pch;
+    char *line;
+    line = (char *) s.c_str();
+    pch = strtok (line, delim);
+    while (pch != NULL)
+    {
+        //printf ("%s\n",pch);
+        string push(pch);
+        re.push_back(push);
+        pch = strtok (NULL, delim);
     }
-
-    return result;
+    return re;
 }
 
 bool file_exists(const std::string &name) {
@@ -68,7 +74,6 @@ bool isSolvable(int **grid) {
     int xmin = -1;
     int ymin = -1;
     int count = 0;
-    int cap = size * size;
     int line[max];
     int blank;
     // find state
@@ -146,7 +151,7 @@ bool isSolvable(int **grid) {
         cout << "odd puzel even inverces\n";
         return true;
     }
-    if (g_size % 2 == 0 && ((g_size - blank) % 2 == inversions % 2)) {
+    if (g_size % 2 == 0 && ((g_size - blank) % 2 != inversions % 2)) {
         cout << "even puzzel " << (g_size - blank) % 2 << "\n";
         return true;
     }
